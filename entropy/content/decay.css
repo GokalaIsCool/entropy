@@ -1,0 +1,65 @@
+/* ========================================================
+   ENTROPY — CONTENT DECAY STYLESHEET
+   Reversible visual friction classes applied to active tabs.
+   Guiding principle: Make staying less appealing without breaking core safety.
+   ======================================================== */
+
+/* Base transition for smooth friction application */
+body.entropy-decay-active {
+  transition: filter 0.6s ease, background-color 0.6s ease !important;
+  filter: grayscale(40%) contrast(95%);
+}
+
+/* 1. Subtle Spacing & Cramming (Warning Stage) */
+body.entropy-decay-active article,
+body.entropy-decay-active .post-card,
+body.entropy-decay-active [class*="card"],
+body.entropy-decay-active [class*="tweet"],
+body.entropy-decay-active [class*="post"] {
+  padding: 4px 8px !important;
+  transition: all 0.5s ease !important;
+}
+
+body.entropy-decay-active p,
+body.entropy-decay-active span {
+  letter-spacing: -0.4px !important;
+}
+
+/* 2. Transparency & Overlap (Decay Stage) */
+body.entropy-decay-active.entropy-stage-2,
+body.entropy-stage-2 {
+  filter: grayscale(80%) sepia(20%) contrast(90%) !important;
+}
+
+body.entropy-decay-active.entropy-stage-2 article,
+body.entropy-decay-active.entropy-stage-2 .post-card,
+body.entropy-stage-2 article,
+body.entropy-stage-2 .post-card {
+  background: rgba(30, 41, 59, 0.45) !important;
+  margin-top: -20px !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* 3. Chaos & Distortion (Chaos Stage) */
+body.entropy-decay-active.entropy-stage-3,
+body.entropy-stage-3 {
+  filter: grayscale(100%) contrast(120%) !important;
+}
+
+body.entropy-decay-active.entropy-stage-3 img,
+body.entropy-decay-active.entropy-stage-3 .avatar,
+body.entropy-stage-3 img,
+body.entropy-stage-3 .avatar {
+  transform: scale(1.15) rotate(2deg) !important;
+  filter: contrast(150%) hue-rotate(90deg) !important;
+  transition: transform 0.5s ease !important;
+}
+
+body.entropy-decay-active.entropy-stage-3 article,
+body.entropy-decay-active.entropy-stage-3 .post-card,
+body.entropy-stage-3 article,
+body.entropy-stage-3 .post-card {
+  margin-top: -40px !important;
+  transform: rotate(-1deg) !important;
+}

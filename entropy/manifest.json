@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Entropy — Progressive Visual Friction",
+  "version": "1.0.0",
+  "description": "Applies reversible visual friction to distracting pages instead of binary website blocks.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Entropy"
+  }
+}

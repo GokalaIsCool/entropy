@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entropy — Week 1 & 2 Practice Demo</title>
+  <style>
+    /* ========================================================
+       WEEK 1: BASE STYLES & LAYOUT
+       ======================================================== */
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 24px;
+      transition: background-color 0.5s ease, filter 0.5s ease;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Top Control Dock */
+    .control-dock {
+      background: #182234;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .dock-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #293548;
+      padding-bottom: 12px;
+    }
+
+    .dock-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-badge {
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #334155;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+    }
+
+    .status-badge.normal { background: #065f46; color: #a7f3d0; }
+    .status-badge.stage-1 { background: #854d0e; color: #fef08a; }
+    .status-badge.stage-2 { background: #9a3412; color: #fed7aa; }
+    .status-badge.stage-3 { background: #991b1b; color: #fecaca; }
+
+    .timer-display {
+      font-size: 2rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+      margin: 10px 0;
+      color: #f1f5f9;
+      letter-spacing: 1px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    button {
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary { background: var(--accent); color: #0f172a; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: #334155; color: #f8fafc; }
+    .btn-secondary:hover { background: #475569; }
+    .btn-reset { background: #27272a; color: #e4e4e7; border: 1px solid #52525b; }
+    .btn-reset:hover { background: #3f3f46; }
+
+    /* The Practice Button: Changes appearance */
+    #chameleon-btn {
+      padding: 10px 20px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      background: #4f46e5;
+      color: #ffffff;
+      border-radius: 8px;
+      border: 2px solid #6366f1;
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Appearance variations for practice button */
+    #chameleon-btn.look-neon {
+      background: #ec4899;
+      border-color: #f472b6;
+      box-shadow: 0 0 16px #ec4899;
+      transform: scale(1.05) rotate(-1deg);
+      color: #fff;
+    }
+    #chameleon-btn.look-warning {
+      background: #eab308;
+      border-color: #facc15;
+      color: #713f12;
+      box-shadow: 0 0 12px #eab308;
+      letter-spacing: 2px;
+      transform: scale(0.95);
+    }
+    #chameleon-btn.look-glitch {
+      background: #10b981;
+      border-color: #34d399;
+      color: #064e3b;
+      box-shadow: 4px 4px 0px #047857;
+      transform: skewX(-10deg);
+    }
+
+    .info-log {
+      margin-top: 14px;
+      background: #090d16;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8rem;
+      color: #38bdf8;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Feed & Post Cards */
+    .feed-header {
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .feed-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .post-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      transition: all 0.4s ease;
+    }
+
+    .post-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      overflow: hidden;
+      flex-shrink: 0;
+      transition: all 0.4s ease;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .author-info .name {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .author-info .handle {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .post-content {
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      margin-bottom: 12px;
+      transition: all 0.4s ease;
+    }
+
+    .post-media {
+      width: 100%;
+      height: 180px;
+      background: #334155;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      transition: all 0.4s ease;
+    }
+
+    .post-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.4s ease;
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 24px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      padding-top: 8px;
+      border-top: 1px solid #2d3748;
+    }
+
+    .post-actions span {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ========================================================
+       DECAY EFFECTS (10s, 20s, 30s)
+       Reversible CSS classes applied to <body> or elements
+       ======================================================== */
+
+    /* STAGE 1 (10 seconds): WARNING - Padding collapses, desaturation */
+    body.decay-stage-1 .post-card {
+      padding: 4px 8px !important;
+      margin-bottom: 4px !important;
+      border-color: #64748b !important;
+      filter: grayscale(40%);
+    }
+
+    body.decay-stage-1 .post-content {
+      line-height: 1.15 !important;
+      letter-spacing: -0.3px;
+    }
+
+    /* STAGE 2 (20 seconds): DECAY - Background transparent, overlapping tweets */
+    body.decay-stage-2 .post-card {
+      background: rgba(30, 41, 59, 0.45) !important;
+      border-color: rgba(239, 68, 68, 0.3) !important;
+      margin-top: -24px !important;
+      position: relative;
+      z-index: 1;
+      filter: grayscale(80%) sepia(20%);
+      box-shadow: none !important;
+    }
+
+    body.decay-stage-2 .post-content {
+      letter-spacing: -0.6px;
+    }
+
+    /* STAGE 3 (30 seconds): CHAOS - CSS grid collapses, profile images massive */
+    body.decay-stage-3 .post-author {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+    }
+
+    body.decay-stage-3 .avatar {
+      width: 180px !important;
+      height: 180px !important;
+      border-radius: 0 !important;
+      transform: rotate(4deg) scale(1.1);
+      margin: 10px 0 !important;
+      border: 4px solid #ef4444 !important;
+    }
+
+    body.decay-stage-3 .post-media {
+      height: 280px !important;
+      transform: skewY(2deg);
+      filter: contrast(180%) hue-rotate(180deg);
+    }
+
+    body.decay-stage-3 .post-card {
+      margin-top: -50px !important;
+      transform: rotate(-1.5deg);
+      background: rgba(15, 23, 42, 0.2) !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Top Control Dock (Practice & Testing Area) -->
+    <div class="control-dock">
+      <div class="dock-header">
+        <div class="dock-title">
+          <span>⚡</span> Entropy Test Page
+        </div>
+        <div id="status-badge" class="status-badge normal">Stage 0: Normal</div>
+      </div>
+
+      <div class="timer-display" id="timer-display">00:00</div>
+
+      <div class="button-group">
+        <!-- Appearance practice button -->
+        <button id="chameleon-btn">Change My Appearance</button>
+        <!-- Timer controls -->
+        <button id="start-btn" class="btn-primary">Start Timer</button>
+        <button id="pause-btn" class="btn-secondary">Pause</button>
+        <button id="reset-btn" class="btn-reset">Reset Page</button>
+      </div>
+
+      <!-- Quick skip buttons to test stages immediately -->
+      <div class="button-group" style="margin-top: 10px;">
+        <span style="font-size: 0.8rem; color: #94a3b8; align-self: center;">Jump to:</span>
+        <button id="jump-10" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;">10s (Warning)</button>
+        <button id="jump-20" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;">20s (Decay)</button>
+        <button id="jump-30" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;">30s (Chaos)</button>
+      </div>
+
+      <div class="info-log" id="info-log">
+        Ready. Click "Start Timer" or test with the Chrome extension popup.
+      </div>
+    </div>
+
+    <!-- Feed / Doom-Scroll Simulator -->
+    <div class="feed-header">
+      <h2>Live Social Feed</h2>
+      <span style="font-size: 0.85rem; color: var(--text-muted);">Doom-scrolling test target</span>
+    </div>
+
+    <div class="feed-stream" id="feed-stream">
+      <!-- Post 1 -->
+      <article class="post-card">
+        <div class="post-author">
+          <div class="avatar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="7" r="4"/><path d="M5.5 21a8.5 8.5 0 0 1 13 0"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="name">Sarah Chen</div>
+            <div class="handle">@sarahchen · 2m</div>
+          </div>
+        </div>
+        <div class="post-content">
+          Productivity blockers that use 403 walls don't work. We just disable them. What if the webpage slowly decayed the longer you stayed?
+        </div>
+        <div class="post-actions">
+          <span>💬 42</span>
+          <span>🔄 128</span>
+          <span>❤️ 512</span>
+        </div>
+      </article>
+
+      <!-- Post 2 -->
+      <article class="post-card">
+        <div class="post-author">
+          <div class="avatar" style="background: #3b82f6;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V18a1 1 0 0 1-2 0v-1.07A7 7 0 0 1 5.07 11H4a1 1 0 0 1 0-2h1.07A7 7 0 0 1 11 5.07V4a1 1 0 0 1 2 0v1.07A7 7 0 0 1 18.93 11H20a1 1 0 0 1 0 2h-1.07A7 7 0 0 1 13 16.93z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="name">Marcus Brody</div>
+            <div class="handle">@marcus_dev · 15m</div>
+          </div>
+        </div>
+        <div class="post-content">
+          Watch the timeline closely: at 10s the padding crams together. At 20s the background turns transparent. At 30s the grid collapses.
+        </div>
+        <div class="post-media">
+          <span>[ High Definition Timeline Graphic ]</span>
+        </div>
+        <div class="post-actions">
+          <span>💬 19</span>
+          <span>🔄 85</span>
+          <span>❤️ 310</span>
+        </div>
+      </article>
+
+      <!-- Post 3 -->
+      <article class="post-card">
+        <div class="post-author">
+          <div class="avatar" style="background: #ec4899;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="name">Elena Rostova</div>
+            <div class="handle">@elena_ui · 1h</div>
+          </div>
+        </div>
+        <div class="post-content">
+          Digital friction introduces biology into clean software interfaces. Entropy makes scrolling feel physically uncomfortable!
+        </div>
+        <div class="post-actions">
+          <span>💬 9</span>
+          <span>🔄 34</span>
+          <span>❤️ 190</span>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       WEEK 1: JAVASCRIPT & DOM FUNDAMENTALS
+       ======================================================== -->
+  <script>
+    // ------------------------------------------------------
+    // 1. VARIABLES (let and const)
+    // ------------------------------------------------------
+    // Use `const` for DOM elements and fixed configurations that do not get reassigned
+    const chameleonButton = document.querySelector('#chameleon-btn');
+    const startButton = document.querySelector('#start-btn');
+    const pauseButton = document.querySelector('#pause-btn');
+    const resetButton = document.querySelector('#reset-btn');
+    const timerDisplay = document.querySelector('#timer-display');
+    const statusBadge = document.querySelector('#status-badge');
+    const infoLog = document.querySelector('#info-log');
+    const jump10Btn = document.querySelector('#jump-10');
+    const jump20Btn = document.querySelector('#jump-20');
+    const jump30Btn = document.querySelector('#jump-30');
+
+    // Use `let` for state variables that change over time
+    let secondsElapsed = 0;
+    let timerInterval = null;
+    let buttonAppearanceIndex = 0;
+
+    // ------------------------------------------------------
+    // 2. ARRAYS
+    // ------------------------------------------------------
+    // Array of CSS classes for the appearance-changing button
+    const buttonAppearances = [
+      { name: 'Default Indigo', className: '' },
+      { name: 'Neon Glow', className: 'look-neon' },
+      { name: 'Warning Stripes', className: 'look-warning' },
+      { name: 'Glitch Angle', className: 'look-glitch' }
+    ];
+
+    // Array of decay stage descriptions
+    const decayStages = [
+      { minSeconds: 0, maxSeconds: 9, name: 'Stage 0: Normal', badgeClass: 'normal', bodyClass: '' },
+      { minSeconds: 10, maxSeconds: 19, name: 'Stage 1: Warning (10s)', badgeClass: 'stage-1', bodyClass: 'decay-stage-1' },
+      { minSeconds: 20, maxSeconds: 29, name: 'Stage 2: Decay (20s)', badgeClass: 'stage-2', bodyClass: 'decay-stage-2' },
+      { minSeconds: 30, maxSeconds: Infinity, name: 'Stage 3: Chaos (30s)', badgeClass: 'stage-3', bodyClass: 'decay-stage-3' }
+    ];
+
+    // ------------------------------------------------------
+    // 3. FUNCTIONS
+    // ------------------------------------------------------
+
+    /**
+     * Practice feature: cycles the button's visual appearance using CSS classes.
+     */
+    function cycleButtonAppearance() {
+      // Advance to the next index in the array (wraps around using modulo %)
+      buttonAppearanceIndex = (buttonAppearanceIndex + 1) % buttonAppearances.length;
+      const currentAppearance = buttonAppearances[buttonAppearanceIndex];
+
+      // Remove previous appearance classes
+      buttonAppearances.forEach(app => {
+        if (app.className) chameleonButton.classList.remove(app.className);
+      });
+
+      // Apply the new class if one exists
+      if (currentAppearance.className) {
+        chameleonButton.classList.add(currentAppearance.className);
+      }
+
+      infoLog.textContent = `[DOM Event] Button style changed to: "${currentAppearance.name}"`;
+    }
+
+    /**
+     * Formats seconds into a MM:SS string
+     */
+    function formatTime(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      const formattedMin = String(minutes).padStart(2, '0');
+      const formattedSec = String(seconds).padStart(2, '0');
+      return `${formattedMin}:${formattedSec}`;
+    }
+
+    /**
+     * Evaluates active time and applies corresponding decay stage effects.
+     * Demonstrates CONDITIONALS and DOM Class manipulation.
+     */
+    function evaluateDecayStage() {
+      // Remove all stage classes first to ensure clean state
+      document.body.classList.remove('decay-stage-1', 'decay-stage-2', 'decay-stage-3');
+
+      // CONDITIONALS: trigger different effects at 10, 20, and 30 seconds
+      if (secondsElapsed >= 30) {
+        // Stage 3: Chaos (30s+)
+        document.body.classList.add('decay-stage-3');
+        updateBadge('Stage 3: Chaos (30s+)', 'stage-3');
+        infoLog.textContent = '⚠️ 30s Reached: Grid collapsed & images blown up (Stage 3: Chaos).';
+      } else if (secondsElapsed >= 20) {
+        // Stage 2: Decay (20s-29s)
+        document.body.classList.add('decay-stage-2');
+        updateBadge('Stage 2: Decay (20s)', 'stage-2');
+        infoLog.textContent = '⚡ 20s Reached: Background transparent & tweets overlap (Stage 2: Decay).';
+      } else if (secondsElapsed >= 10) {
+        // Stage 1: Warning (10s-19s)
+        document.body.classList.add('decay-stage-1');
+        updateBadge('Stage 1: Warning (10s)', 'stage-1');
+        infoLog.textContent = '⏱️ 10s Reached: Padding collapsed & text crammed together (Stage 1: Warning).';
+      } else {
+        // Stage 0: Normal (0s-9s)
+        updateBadge('Stage 0: Normal', 'normal');
+        infoLog.textContent = 'Timer running: Page is currently in normal state (0-9s).';
+      }
+    }
+
+    /**
+     * Helper to update status badge styling and text
+     */
+    function updateBadge(text, className) {
+      statusBadge.textContent = text;
+      statusBadge.className = `status-badge ${className}`;
+    }
+
+    /**
+     * Starts the timer interval
+     */
+    function startTimer() {
+      if (timerInterval !== null) return; // Prevent multiple overlapping intervals
+
+      startButton.disabled = true;
+      pauseButton.disabled = false;
+
+      timerInterval = setInterval(() => {
+        secondsElapsed++;
+        timerDisplay.textContent = formatTime(secondsElapsed);
+        evaluateDecayStage();
+      }, 1000);
+
+      infoLog.textContent = 'Decay timer started. Watch effects trigger at 10s, 20s, and 30s.';
+    }
+
+    /**
+     * Pauses the timer interval
+     */
+    function pauseTimer() {
+      if (timerInterval !== null) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        startButton.disabled = false;
+        pauseButton.disabled = true;
+        infoLog.textContent = `Timer paused at ${secondsElapsed}s.`;
+      }
+    }
+
+    /**
+     * Resets all state, timers, and DOM classes cleanly back to normal
+     */
+    function resetAll() {
+      pauseTimer();
+      secondsElapsed = 0;
+      timerDisplay.textContent = '00:00';
+      
+      // Clean up body classes
+      document.body.classList.remove('decay-stage-1', 'decay-stage-2', 'decay-stage-3');
+      // Also clean up extension classes if extension was used
+      document.body.classList.remove('entropy-decay-active', 'entropy-stage-1', 'entropy-stage-2', 'entropy-stage-3');
+
+      updateBadge('Stage 0: Normal', 'normal');
+      startButton.disabled = false;
+      pauseButton.disabled = false;
+      infoLog.textContent = 'Page reset successfully. All visual decay removed.';
+    }
+
+    /**
+     * Jump helper for easy testing
+     */
+    function jumpToTime(targetSeconds) {
+      secondsElapsed = targetSeconds;
+      timerDisplay.textContent = formatTime(secondsElapsed);
+      evaluateDecayStage();
+    }
+
+    // ------------------------------------------------------
+    // 4. EVENT LISTENERS
+    // ------------------------------------------------------
+    chameleonButton.addEventListener('click', cycleButtonAppearance);
+    startButton.addEventListener('click', startTimer);
+    pauseButton.addEventListener('click', pauseTimer);
+    resetButton.addEventListener('click', resetAll);
+
+    jump10Btn.addEventListener('click', () => jumpToTime(10));
+    jump20Btn.addEventListener('click', () => jumpToTime(20));
+    jump30Btn.addEventListener('click', () => jumpToTime(30));
+  </script>
+</body>
+</html>

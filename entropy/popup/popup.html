@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entropy Controls</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <div class="logo">
+        <span class="icon">⚡</span>
+        <h1>ENTROPY</h1>
+      </div>
+      <span id="popup-status" class="status-pill normal">Normal</span>
+    </header>
+
+    <p class="subtitle">Progressive visual friction engine</p>
+
+    <div class="action-section">
+      <button id="btn-apply-decay" class="btn btn-decay">
+        <span>🔥</span> Apply Decay
+      </button>
+
+      <button id="btn-reset" class="btn btn-reset">
+        <span>🔄</span> Reset
+      </button>
+    </div>
+
+    <div class="stage-selector">
+      <div class="stage-label">Test specific stage:</div>
+      <div class="stage-buttons">
+        <button id="btn-stage-1" class="btn-chip" data-stage="1">1: Warning</button>
+        <button id="btn-stage-2" class="btn-chip" data-stage="2">2: Decay</button>
+        <button id="btn-stage-3" class="btn-chip" data-stage="3">3: Chaos</button>
+      </div>
+    </div>
+
+    <footer class="popup-footer">
+      <div id="status-message" class="message">Ready. Click "Apply Decay" to modify current page.</div>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
